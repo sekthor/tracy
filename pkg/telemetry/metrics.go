@@ -35,7 +35,7 @@ func newMetricExporter(ctx context.Context, conf Config) (metric.Exporter, error
 	var exporter metric.Exporter
 	var err error
 
-	switch conf.Type {
+	switch conf.Protocol {
 
 	case "http", "https":
 		var options []otlpmetrichttp.Option

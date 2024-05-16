@@ -8,10 +8,6 @@ import (
 	"go.opentelemetry.io/otel/sdk/metric"
 )
 
-type TelemetryConfig struct {
-	Metrics Config
-}
-
 func SetupOTelSDK(ctx context.Context, conf TelemetryConfig) (shutdown func(context.Context) error, err error) {
 	var shutdownFuncs []func(context.Context) error
 

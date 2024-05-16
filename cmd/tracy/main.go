@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/sekthor/tracy/pkg/config"
 	"github.com/sekthor/tracy/pkg/telemetry"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/metric"
@@ -30,16 +31,10 @@ func init() {
 func main() {
 	ctx := context.Background()
 
-	conf := telemetry.TelemetryConfig{
-		Metrics: telemetry.Config{
-			Enabled:  true,
-			Type:     "http",
-			Insecure: true,
-			Endpoint: "localhost:4318",
-		},
-	}
+	conf := config.ReadEnv()
 
-	shutdown, err := telemetry.SetupOTelSDK(ctx, conf)
+	shutdown, err := telemetry.SetupOTelSDK(ctx, conf.Telemetry)
+	defer shutdown(ctx)
 
 	if err != nil {
 		log.Fatal(err)
@@ -51,8 +46,6 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	defer shutdown(ctx)
 }
 
 func greet(c *gin.Context) {
